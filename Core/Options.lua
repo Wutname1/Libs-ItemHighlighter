@@ -193,13 +193,13 @@ local function buildItemList(listName, displayName, optionTable)
 					buildItemList(listName, displayName, optionTable)
 					if isWhitelist then
 						-- Also rebuild blacklist if it exists
-						local blacklistTable = GetOptions().args.customLists.args.Blacklist
+						local blacklistTable = GetOptions().args.CustomLists.args.Blacklist
 						if blacklistTable then
 							buildItemList('customBlacklist', 'Blacklist', blacklistTable)
 						end
 					else
 						-- Also rebuild whitelist if it exists
-						local whitelistTable = GetOptions().args.customLists.args.Whitelist
+						local whitelistTable = GetOptions().args.CustomLists.args.Whitelist
 						if whitelistTable then
 							buildItemList('customWhitelist', 'Whitelist', whitelistTable)
 						end
@@ -221,7 +221,13 @@ local function GetOptions()
 	return {
 		name = "Lib's - Item Highlighter",
 		type = 'group',
+		childGroups = 'tab',
 		args = {
+			General = {
+				type = 'group',
+				name = 'General',
+				order = 1,
+				args = {
 			bagSystemHeader = {
 				type = 'header',
 				name = 'General Settings',
@@ -551,23 +557,20 @@ local function GetOptions()
 					end
 				end,
 				order = 44
+			}
+				}
 			},
-			customListsHeader = {
-				type = 'header',
-				name = 'Custom Item Lists',
-				order = 45
-			},
-			customListsDesc = {
-				type = 'description',
-				name = 'Add items to force them to be highlighted (whitelist) or never highlighted (blacklist). You can enter an item ID, paste an item link, or type an item name.',
-				order = 46
-			},
-			customLists = {
+			CustomLists = {
 				type = 'group',
 				name = 'Custom Lists',
 				childGroups = 'tab',
-				order = 47,
+				order = 2,
 				args = {
+					description = {
+						type = 'description',
+						name = 'Add items to force them to be highlighted (whitelist) or never highlighted (blacklist). You can enter an item ID, paste an item link, or type an item name.',
+						order = 0
+					},
 					Whitelist = {
 						type = 'group',
 						name = 'Whitelist (Always Highlight)',
@@ -592,7 +595,7 @@ local function GetOptions()
 										local itemID, itemName = addon:ParseItemInput(input)
 										if itemID then
 											addon.DB.customWhitelist[itemID] = itemName
-											buildItemList('customWhitelist', 'Whitelist', GetOptions().args.customLists.args.Whitelist)
+											buildItemList('customWhitelist', 'Whitelist', GetOptions().args.CustomLists.args.Whitelist)
 											print("|cff00FF00Added to whitelist:|r " .. (itemName or 'Item ' .. itemID))
 
 											-- Refresh bags
@@ -620,7 +623,7 @@ local function GetOptions()
 								set = function(_, value)
 									addon.DB.pageSize = value
 									addon.DB.currentWhitelistPage = 1
-									buildItemList('customWhitelist', 'Whitelist', GetOptions().args.customLists.args.Whitelist)
+									buildItemList('customWhitelist', 'Whitelist', GetOptions().args.CustomLists.args.Whitelist)
 								end
 							}
 						}
@@ -649,7 +652,7 @@ local function GetOptions()
 										local itemID, itemName = addon:ParseItemInput(input)
 										if itemID then
 											addon.DB.customBlacklist[itemID] = itemName
-											buildItemList('customBlacklist', 'Blacklist', GetOptions().args.customLists.args.Blacklist)
+											buildItemList('customBlacklist', 'Blacklist', GetOptions().args.CustomLists.args.Blacklist)
 											print("|cffFF0000Added to blacklist:|r " .. (itemName or 'Item ' .. itemID))
 
 											-- Refresh bags
@@ -677,24 +680,24 @@ local function GetOptions()
 								set = function(_, value)
 									addon.DB.pageSize = value
 									addon.DB.currentBlacklistPage = 1
-									buildItemList('customBlacklist', 'Blacklist', GetOptions().args.customLists.args.Blacklist)
+									buildItemList('customBlacklist', 'Blacklist', GetOptions().args.CustomLists.args.Blacklist)
 								end
 							}
 						}
 					}
 				}
 			},
-			animationHeader = {
-				type = 'header',
-				name = 'Animation Settings',
-				order = 50
-			},
-			animationGroup = {
+			Animation = {
 				type = 'group',
-				name = 'Animation Timing',
-				inline = true,
-				order = 51,
+				name = 'Animation',
+				order = 3,
 				args = {
+					animationGroup = {
+						type = 'group',
+						name = 'Animation Timing',
+						inline = true,
+						order = 1,
+						args = {
 					cycleTime = {
 						type = 'range',
 						name = 'Cycle Time',
@@ -740,6 +743,8 @@ local function GetOptions()
 						end,
 						order = 3
 					}
+						}
+					}
 				}
 			}
 		}
@@ -753,8 +758,8 @@ function addon:SetupOptions()
 	Log('Options panel registered with Blizzard Interface')
 
 	-- Initialize the custom lists
-	buildItemList('customWhitelist', 'Whitelist', optionsTable.args.customLists.args.Whitelist)
-	buildItemList('customBlacklist', 'Blacklist', optionsTable.args.customLists.args.Blacklist)
+	buildItemList('customWhitelist', 'Whitelist', optionsTable.args.CustomLists.args.Whitelist)
+	buildItemList('customBlacklist', 'Blacklist', optionsTable.args.CustomLists.args.Blacklist)
 
 	-- Register slash commands
 	SLASH_LIBSITEMHIGHLIGHTER1 = '/libsih'

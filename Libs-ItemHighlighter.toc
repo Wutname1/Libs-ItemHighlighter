@@ -10,8 +10,17 @@
 ## X-Category: Bags & Inventory
 ## SavedVariables: LibsIHDB
 ## OptionalDependencies: Baganator, Bagnon, BagBrother, AdiBags, BetterBags, ElvUI, SpartanUI, Libs-AddonTools
-
-# Type definitions (LibsIH.definition.lua) are not packaged - for IDE support only
+## Category: Inventory
+## Category-deDE: Inventar
+## Category-esES: Inventario
+## Category-esMX: Inventario
+## Category-frFR: Inventaire
+## Category-itIT: Inventario
+## Category-koKR: 소지품
+## Category-ptBR: Inventário
+## Category-ruRU: Инвентарь
+## Category-zhCN: 物品栏
+## Category-zhTW: 物品欄
 
 # Required Ace3 libraries
 libs\Ace3\Ace3.xml
